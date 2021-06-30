@@ -46,11 +46,20 @@ func DeleteProductById(c *fiber.Ctx) error {
 	}
 	repository.DeleteProductById(int64(id))
 	return c.JSON(fiber.Map{
-		"message" : "deleted",
+		"message": "deleted",
 	})
 }
 
 func GetProductByCategory(c *fiber.Ctx) error {
 	name := c.Params("name")
 	return c.JSON(repository.FindProductByCategory(name))
+}
+
+func GetProductsBestPrice(c *fiber.Ctx) error {
+	return c.JSON(repository.FindTop4MinPriceProduct())
+}
+
+func SearchProducts(c *fiber.Ctx) error {
+	key := c.Params("key")
+	return c.JSON(repository.FindProductsByKeyName(key))
 }

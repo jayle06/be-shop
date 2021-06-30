@@ -20,7 +20,7 @@ func Register(c *fiber.Ctx) error {
 			c.Status(400)
 			return c.JSON(fiber.Map{
 				"message": "Cannot be null",
-				"field" : key,
+				"field":   key,
 			})
 		}
 	}
@@ -74,11 +74,8 @@ func Login(c *fiber.Ctx) error {
 		HTTPOnly: true,
 	}
 	c.Cookie(&cookie)
-	return c.JSON(fiber.Map{
-		"message": "success",
-	})
+	return c.JSON(cookie)
 }
-
 
 func Logout(c *fiber.Ctx) error {
 	cookie := fiber.Cookie{

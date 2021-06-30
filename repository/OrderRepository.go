@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func CreateOder(order *model.Order) *model.Order{
+func CreateOder(order *model.Order) *model.Order {
 	order.CreatedAt = time.Now().Unix()
 	database.DB.Create(&order)
 	return order
@@ -14,6 +14,16 @@ func CreateOder(order *model.Order) *model.Order{
 
 func FindOrderById(id int64) *model.Order {
 	order := new(model.Order)
-	database.DB.Preload("OrderItem").Where("id = ?", id).Find(&order)
+	orderItems := new([]model.OrderItem)
+
+	database.DB.Where("order_id = ?", id).Find(&orderItems)
+	database.DB.Where("id = ?", id).Find(&order)
+
+	for _, item := range *orderItems {
+		if item.OrderId == id {
+			order.OrderItems = append(order.OrderItems, item)
+		}
+	}
+
 	return order
 }
